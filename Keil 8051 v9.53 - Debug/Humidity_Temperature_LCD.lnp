@@ -1,0 +1,4 @@
+"./src/Humidity_Temperature_LCD_main.OBJ",
+"./src/InitDevice.OBJ",
+"./src/SILABS_STARTUP.OBJ"
+TO "HUMIDITY_TEMPERATURE_LCD.OMF.CRBUILD" REMOVEUNUSED PRINT(.\Humidity_Temperature_LCD.m51) PAGEWIDTH (120) PAGELENGTH (65) CLASSES( CODE(C:0x0 - C:0x1ffe), CONST(C:0x0 - C:0x1ffe), ECODE(C:0x0 - C:0x1ffe), HCONST(C:0x0 - C:0x1ffe), XDATA(X:0x0 - X:0xff), HDATA(X:0x0 - X:0xff))

@@ -1,0 +1,111 @@
+C51 COMPILER V9.53.0.0   HUMIDITY_TEMPERATURE_LCD_MAIN                                     01/22/2018 00:09:33 PAGE 1   
+
+
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE HUMIDITY_TEMPERATURE_LCD_MAIN
+OBJECT MODULE PLACED IN .\src\Humidity_Temperature_LCD_main.OBJ
+COMPILER INVOKED BY: c:\SiliconLabs\SimplicityStudio\v4\developer\toolchains\keil_8051\9.53\BIN\C51.exe C:\Users\sxmchxn
+                    -\SimplicityStudio\v4_workspace\Humidity_Temperature_LCD_4bits\src\Humidity_Temperature_LCD_main.c OMF2 SMALL DEBUG OBJEC
+                    -TEXTEND ROM(LARGE) WARNINGLEVEL(2) FLOATFUZZY(3) OPTIMIZE(8,SPEED) DEFINE(DEBUG=1) INTVECTOR(0X0000) INTPROMOTE INCDIR(C
+                    -:/Users/sxmchxn/SimplicityStudio/v4_workspace/Humidity_Temperature_LCD_4bits/inc;C:/SiliconLabs/SimplicityStudio/v4/deve
+                    -loper/sdks/8051/v4.0.4//Device/shared/si8051base;C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/8051/v4.0.4//Device/E
+                    -FM8BB1/inc) PRINT(.\src\Humidity_Temperature_LCD_main.lst) COND PAGEWIDTH(120) PAGELENGTH(65) OBJECT(.\src\Humidity_Temp
+                    -erature_LCD_main.OBJ)
+
+line level    source
+
+   1          
+   2          //-----------------------------------------------------------------------------
+   3          // Includes
+   4          //-----------------------------------------------------------------------------
+   5          #include <SI_EFM8BB1_Register_Enums.h>                  // SFR declarations
+   6          #include "InitDevice.h"
+   7          #include <stdio.h>
+   8          // $[Generated Includes]
+   9          // [Generated Includes]$
+  10          
+  11                  /*
+  12                   * Breadboard wiring notes:
+  13                   *
+  14                   * LCD:
+  15                   * RS wired to P0.6
+  16                   * RW wired to ground
+  17                   * E wired to P0.7
+  18                   * D0-7 wired to P1.0-3
+  19                   *
+  20                   * DHT11 IO wired to P0.2
+  21                   *
+  22                   * BME280 board is in I2C mode
+  23                   * device address is 1110110 because SDO is connected to GND
+  24                   * SDA is wired to P0.0
+  25                   * SCL is wired to P0.1
+  26                   *
+  27                   */
+  28          
+  29          #include "DHT11.h"
+  30          #include "LCD16X2.h"
+  31          #include "utils.h"
+  32          
+  33          #define BME280_SCL P0_B0
+  34          #define BME280_SDA P0_B1
+  35          
+  36          
+  37          //-----------------------------------------------------------------------------
+  38          // main() Routine
+  39          // ----------------------------------------------------------------------------
+  40          int main (void)
+  41          {
+  42   1      
+  43   1              // Call hardware initialization routine
+  44   1              enter_DefaultMode_from_RESET();
+  45   1      
+  46   1              // set the LCD to sane settings
+  47   1              lcd_initialize();
+  48   1      
+  49   1              // print some useless initial text
+  50   1              print_to_lcd();
+C51 COMPILER V9.53.0.0   HUMIDITY_TEMPERATURE_LCD_MAIN                                     01/22/2018 00:09:33 PAGE 2   
+
+  51   1      
+  52   1              // dht11 needs one second to be ready for the start signal
+  53   1              // luckily, all the initial LCD stuff takes a bit over one second
+  54   1      
+  55   1              // otherwise, uncomment the next line for a two second delay
+  56   1              // delay_seconds(2);
+  57   1      
+  58   1              dht11_initialize();
+  59   1              // get some initial data asap
+  60   1              dht11_read_data();
+  61   1              // show initial data on the LCD
+  62   1              print_to_lcd();
+  63   1      
+  64   1              while (1) 
+  65   1         {
+  66   2                      // update LCD with new data every 10 seconds, forever
+  67   2                      delay_seconds(10);
+  68   2                      dht11_initialize();
+  69   2                      dht11_read_data();
+  70   2                      print_to_lcd();
+  71   2           // $[Generated Run-time code]
+  72   2           // [Generated Run-time code]$
+  73   2         }                             
+  74   1      }
+  75          
+  76          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     36    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

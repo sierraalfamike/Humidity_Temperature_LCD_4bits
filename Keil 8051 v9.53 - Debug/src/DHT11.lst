@@ -1,0 +1,107 @@
+C51 COMPILER V9.53.0.0   DHT11                                                             01/22/2018 00:09:32 PAGE 1   
+
+
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE DHT11
+OBJECT MODULE PLACED IN .\src\DHT11.OBJ
+COMPILER INVOKED BY: c:\SiliconLabs\SimplicityStudio\v4\developer\toolchains\keil_8051\9.53\BIN\C51.exe C:\Users\sxmchxn
+                    -\SimplicityStudio\v4_workspace\Humidity_Temperature_LCD_4bits\src\DHT11.c OMF2 SMALL DEBUG OBJECTEXTEND ROM(LARGE) WARNI
+                    -NGLEVEL(2) FLOATFUZZY(3) OPTIMIZE(8,SPEED) DEFINE(DEBUG=1) INTVECTOR(0X0000) INTPROMOTE INCDIR(C:/Users/sxmchxn/Simplici
+                    -tyStudio/v4_workspace/Humidity_Temperature_LCD_4bits/inc;C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/8051/v4.0.4//
+                    -Device/shared/si8051base;C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/8051/v4.0.4//Device/EFM8BB1/inc) PRINT(.\src\
+                    -DHT11.lst) COND PAGEWIDTH(120) PAGELENGTH(65) OBJECT(.\src\DHT11.OBJ)
+
+line level    source
+
+   1          /*
+   2           * DHT11.c
+   3           *
+   4           *  Created on: Jan 20, 2018
+   5           *      Author: sxmchxn
+   6           */
+   7          
+   8          #include <SI_EFM8BB1_Register_Enums.h>
+   9          #include "DHT11.h"
+  10          #include "utils.h"
+  11          
+  12          
+  13          dht11_data_t dht11_result;
+  14          uint8_t*  dht11_result_ptr;
+  15          
+  16          int16_t temperature = 0;
+  17          int16_t humidity = 0;
+  18          
+  19          void dht11_initialize()
+  20          {
+  21   1              DHT11_PIN = 0;
+  22   1              delay_us(20000);
+  23   1              DHT11_PIN = 1;
+  24   1      }
+  25          
+  26          void dht11_read_data()
+  27          {
+  28   1              // wait til DHT11 responds with ready signal
+  29   1      //      dht11_io_expected_status = 0;
+  30   1      //      dht11_io_expected_status_expected_duration_us = 80;
+  31   1      //      dht11_io_status_current_duration = 0;
+  32   1      //      while ( DHT11_PIN == dht11_io_expected_status && dht11_io_status_current_duration < dht11_io_expected_s
+             -tatus_expected_duration_us)
+  33   1      //      {
+  34   1      //              dht11_io_status_current_duration++;
+  35   1      //      }
+  36   1      //      dht11_io_expected_status = 1;
+  37   1      //      dht11_io_expected_status_expected_duration_us = 80;
+  38   1      //      dht11_io_status_current_duration = 0;
+  39   1      //      while ( DHT11_PIN == dht11_io_expected_status && dht11_io_status_current_duration < dht11_io_expected_s
+             -tatus_expected_duration_us)
+  40   1      //      {
+  41   1      //              dht11_io_status_current_duration++;
+  42   1      //      }
+  43   1              delay_us(200);
+  44   1              // read all the high pulses and assign value by duration
+  45   1      
+  46   1              dht11_result_ptr = (uint8_t*)&dht11_result;
+  47   1      
+  48   1              {
+  49   2                      uint8_t i = 0;
+C51 COMPILER V9.53.0.0   DHT11                                                             01/22/2018 00:09:32 PAGE 2   
+
+  50   2              for ( i = 0; i < 5; i++ )
+  51   2              {
+  52   3                      uint8_t dht11_stream = 0;
+  53   3                      int8_t dht11_response_bit = 0;
+  54   3                      for ( dht11_response_bit = 7; dht11_response_bit >= 0; dht11_response_bit-- )
+  55   3                      {
+  56   4                              // wait for the dht11_io pin to go high
+  57   4                              while ( !DHT11_PIN );
+  58   4                              // count time to see if the pin is high for a short or long period of time
+  59   4                              delay_us(50);
+  60   4                              if ( DHT11_PIN )
+  61   4                              {
+  62   5                                      dht11_stream |=  ( 1 << dht11_response_bit );
+  63   5                                      delay_us(40);
+  64   5                              }
+  65   4                      }
+  66   3                      dht11_result_ptr[i] = dht11_stream;
+  67   3              }
+  68   2              }
+  69   1              humidity = dht11_result.humidity_integer;
+  70   1              temperature = dht11_result.temperature_integer;
+  71   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    126    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
